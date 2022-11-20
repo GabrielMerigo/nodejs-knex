@@ -1,9 +1,19 @@
 const database = require('./database')
 
-const dados = {
-  nome: 'COD',
-  preco: 199.99
-}
+const dados = [
+  {
+    nome: 'Goat Simulator',
+    preco: 10
+  },
+  {
+    nome: 'Dying Light',
+    preco: 20
+  },
+  {
+    nome: 'The last of us ||',
+    preco: 50
+  }
+]
 
 async function insert() {
   try {
@@ -52,6 +62,15 @@ async function deleteSQL() {
 async function update() {
   try {
     await database.where({ id: 4 }).update({ preco: 102.19 }).table('games')
+  } catch (error) {
+    console.log(err)
+  }
+}
+
+async function orderBy() {
+  try {
+    const data = await database.select().table('games').orderBy('preco', 'asc')
+    console.log(data)
   } catch (error) {
     console.log(err)
   }
