@@ -75,3 +75,64 @@ async function orderBy() {
     console.log(err)
   }
 }
+
+async function insertIntoTable() {
+  try {
+    await database.insert({ game_id: 1, nome: 'Rockstar' }).table('estudios')
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+async function oneToOne() {
+  try {
+    const data = await database
+      .select(['games.*', 'estudios.nome as estudios_nome'])
+      .table('games')
+      .leftJoin('estudios', 'estudios.game_id', 'games.id')
+      .where('games.id', 2)
+
+    console.log(data)
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+async function oneToMany() {
+  try {
+    const data = await database
+      .table('games')
+      .innerJoin('estudios', 'estudios.game_id', 'games.id')
+
+    console.log(data)
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+async function manyToMany() {
+  try {
+    const data = await database
+      .select(['estudios.nome as estudio_nome', 'games.nome as game_nome'])
+      .table('games_estudios')
+      .innerJoin('games', 'games.id', 'games_estudios.game_id')
+      .innerJoin('estudios', 'estudios.id', 'games_estudios.estudios_id')
+      .where('estudios.id', 1)
+
+    console.log(data)
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+async function transaction() {
+  try {
+    await database.transaction(async trans => {
+      await database.insert({ nome: 'Naughty Dog' }).table('estudios')
+      await database.insert({ nome: 'Mojang' }).table('estudios')
+      await database.insert({ nome: 'Gearbox' }).table('estudios')
+    })
+  } catch (error) {
+    console.log(error)
+  }
+}
