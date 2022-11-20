@@ -5,7 +5,7 @@ const dados = {
   preco: 199.99
 }
 
-async function execute() {
+async function insert() {
   try {
     const data = await database.insert(dados).into('games')
     console.log(data)
@@ -14,7 +14,7 @@ async function execute() {
   }
 }
 
-async function getData() {
+async function select() {
   try {
     const data = await database.select(['id', 'preco']).table('games')
   } catch (err) {
@@ -31,10 +31,27 @@ async function where() {
   }
 }
 
-async function queryCrua() {
+async function query() {
   try {
     const test = await database.raw('SELECT * FROM games')
     console.log(test)
+  } catch (error) {
+    console.log(err)
+  }
+}
+
+async function deleteSQL() {
+  try {
+    const reg = await database.where({ id: 3 }).delete().table('games')
+    console.log(reg)
+  } catch (error) {
+    console.log(err)
+  }
+}
+
+async function update() {
+  try {
+    await database.where({ id: 4 }).update({ preco: 102.19 }).table('games')
   } catch (error) {
     console.log(err)
   }
